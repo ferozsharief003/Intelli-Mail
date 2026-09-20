@@ -3,54 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IntelliMail - Smart Email Priority Dashboard</title>
+  <title>IntelliMail - Gmail Workspace</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app-container">
-    <header class="navbar">
-      <h1>⚡ IntelliMail AI</h1>
-      <p class="tagline">Smart Email Categorization & Voice Assistant</p>
+  <div class="gmail-app-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="gmail-navbar">
+      <div class="nav-brand">
+        <h1>⚡ IntelliMail</h1>
+        <span class="badge-pro">AI Workspace</span>
+      </div>
+      <div class="nav-search">
+        <input type="text" placeholder="Search mail or AI intelligence..." disabled />
+      </div>
     </header>
 
-    <main class="dashboard">
-      <!-- Left Column: Email List / Heatmap -->
-      <section class="email-section">
-        <h2>📥 Inbox Heatmap</h2>
+    <!-- Main Split-Pane Workspace -->
+    <main class="gmail-main">
+      
+      <!-- Left Pane: Email List (Inbox Feed) -->
+      <aside class="gmail-sidebar">
+        <div class="sidebar-header">
+          <h2>Inbox</h2>
+          <span id="email-count" class="email-count">Loading...</span>
+        </div>
         <div id="email-list" class="email-list">
           <p class="loading">Loading emails from backend...</p>
         </div>
-      </section>
+      </aside>
 
-      <!-- Right Column: AI Insights & Voice Reply -->
-      <section class="ai-section">
-        <h2>🤖 AI Intelligence Panel</h2>
-        
-        <div id="analysis-card" class="card analysis-card">
-          <h3>Email Analysis</h3>
-          <p class="placeholder-text">Select an email from the inbox to analyze.</p>
+      <!-- Right Pane: Email Reading View & AI Intelligence Panel -->
+      <section id="email-workspace" class="gmail-workspace">
+        <!-- Default State when no email is selected -->
+        <div id="workspace-placeholder" class="workspace-placeholder">
+          <div class="placeholder-content">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <h3>Select an email to view intelligence</h3>
+            <p>Choose an item from your inbox list on the left to inspect content, analyze sentiment, and generate AI smart replies.</p>
+          </div>
         </div>
 
-        <div class="card reply-card">
-          <h3>🎙️ Voice & Tone Smart Reply</h3>
-          <textarea id="voice-input" placeholder="Type or dictate your rough reply instruction (e.g., 'Tell them I will send the breakdown by 4 PM')..."></textarea>
+        <!-- Active Email & AI Workspace (Hidden by default until an email is clicked) -->
+        <div id="active-workspace" class="active-workspace hidden">
           
-          <div class="controls">
-            <label for="tone-select">Select Tone:</label>
-            <select id="tone-select">
-              <option value="Professional">Professional</option>
-              <option value="Concise">Concise</option>
-              <option value="Polite Refusal">Polite Refusal</option>
-            </select>
-            <button id="generate-btn" class="btn-primary">Generate Reply</button>
+          <!-- Email Reading Header -->
+          <div class="email-detail-header">
+            <h2 id="detail-subject" class="detail-subject">Email Subject</h2>
+            <div class="email-meta-info">
+              <span id="detail-sender">From: sender@example.com</span>
+              <span id="detail-time" class="detail-time">Time</span>
+            </div>
           </div>
 
-          <div id="reply-output" class="reply-output hidden">
-            <h4>Generated Draft:</h4>
-            <div id="draft-text" class="draft-text"></div>
+          <!-- Email Full Body Content -->
+          <div class="email-body-box">
+            <h4>Message Content:</h4>
+            <p id="detail-body">Full email body text goes here...</p>
           </div>
+
+          <!-- AI Intelligence & Analysis Panel -->
+          <div class="ai-intelligence-panel">
+            <h3>🤖 Gemini AI Intelligence Panel</h3>
+            
+            <div id="analysis-card" class="ai-card">
+              <h4>Email Analysis & Urgency</h4>
+              <p id="analysis-text" class="analysis-content">Select an email to run analysis.</p>
+            </div>
+
+            <div class="ai-card reply-section">
+              <h4>🎙️ Voice & Tone Smart Reply</h4>
+              <textarea id="voice-input" placeholder="Type or dictate your rough reply instruction (e.g., 'Tell them I will send the breakdown by 4 PM')..."></textarea>
+              
+              <div class="controls">
+                <div class="tone-wrapper">
+                  <label for="tone-select">Tone:</label>
+                  <select id="tone-select">
+                    <option value="Professional">Professional</option>
+                    <option value="Concise">Concise</option>
+                    <option value="Polite Refusal">Polite Refusal</option>
+                  </select>
+                </div>
+                <button id="generate-btn" class="btn-primary">Generate Smart Reply</button>
+              </div>
+
+              <div id="reply-output" class="reply-output hidden">
+                <h4>Generated Draft:</h4>
+                <div id="draft-text" class="draft-text"></div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
+
     </main>
   </div>
 

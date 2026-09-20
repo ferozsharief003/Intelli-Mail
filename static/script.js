@@ -15,11 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
 // 1. Fetch emails list
 async function fetchEmails() {
   const container = document.getElementById('email-list');
+  const countBadge = document.getElementById('email-count');
   if (!container) return;
 
   try {
     const res = await fetch(`${API_BASE}/emails`);
     const emails = await res.json();
+
+    if (countBadge) {
+      countBadge.innerText = `${emails.length} messages`;
+    }
 
     container.innerHTML = '';
     emails.forEach((email, index) => {
@@ -44,6 +49,23 @@ async function fetchEmails() {
         card.classList.add('selected');
         selectedEmailContent = email.content;
         
+        // Switch workspace from placeholder to active detail view smoothly
+        const placeholder = document.getElementById('workspace-placeholder');
+        const activeWorkspace = document.getElementById('active-workspace');
+        if (placeholder) placeholder.classList.add('hidden');
+        if (activeWorkspace) activeWorkspace.classList.remove('hidden');
+
+        // Populate email detail view fields
+        const detailSubject = document.getElementById('detail-subject');
+        const detailSender = document.getElementById('detail-sender');
+        const detailTime = document.getElementById('detail-time');
+        const detailBody = document.getElementById('detail-body');
+
+        if (detailSubject) detailSubject.innerText = email.subject || 'No Subject';
+        if (detailSender) detailSender.innerText = `From: ${email.sender || 'Unknown'}`;
+        if (detailTime) detailTime.innerText = email.timestamp || '';
+        if (detailBody) detailBody.innerText = email.content || '';
+
         // Hide stale reply draft on email switch
         const outputDiv = document.getElementById('reply-output');
         if (outputDiv) outputDiv.classList.add('hidden');
@@ -53,18 +75,20 @@ async function fetchEmails() {
 
       container.appendChild(card);
 
-      // Auto-select first email on initial load
+      // Auto-select first email on initial load to populate workspace instantly
       if (index === 0) card.click();
     });
   } catch (err) {
-    container.innerHTML = `<p style="color: #ef4444; padding: 10px;">Failed to connect to backend. Ensure app.py is running.</p>`;
+    container.innerHTML = `<p style="color: #ef4444; padding: 16px;">Failed to connect to backend. Ensure app.py is running.</p>`;
+    if (countBadge) countBadge.innerText = 'Error';
   }
 }
 
 // 2. Analyze selected email safely without glitches
 async function analyzeEmail(content) {
-  const card = document.getElementById('analysis-card');
-  if (!card) return;
+  const analysisCard = document.getElementById('analysis-card');
+  const analysisText = document.getElementById('analysis-text');
+  if (!analysisCard || !analysisText) return;
 
   // Abort any ongoing pending fetch from previous fast-clicks
   if (currentAbortController) {
@@ -73,7 +97,8 @@ async function analyzeEmail(content) {
   currentAbortController = new AbortController();
 
   // Subtle opacity state change prevents layout collapse/jump
-  card.style.opacity = '0.5';
+  analysisCard.style.opacity = '0.5';
+  analysisText.innerText = 'Analyzing message with Gemini AI...';
 
   try {
     const res = await fetch(`${API_BASE}/analyze`, {
@@ -87,27 +112,27 @@ async function analyzeEmail(content) {
     renderAnalysis(data);
   } catch (err) {
     if (err.name !== 'AbortError') {
-      card.innerHTML = `<p style="color: #ef4444; padding: 10px;">Error processing analysis.</p>`;
+      analysisText.innerHTML = `<span style="color: #ef4444;">Error processing AI analysis.</span>`;
     }
   } finally {
-    card.style.opacity = '1';
+    analysisCard.style.opacity = '1';
   }
 }
 
 function renderAnalysis(data) {
-  const card = document.getElementById('analysis-card');
-  if (!card) return;
+  const analysisCard = document.getElementById('analysis-card');
+  if (!analysisCard) return;
 
   const points = Array.isArray(data.why_important) 
     ? data.why_important.map(p => `<li>${p}</li>`).join('')
     : `<li>${data.why_important || ''}</li>`;
 
-  card.innerHTML = `
-    <h3>${data.priority || 'Email Analysis'}</h3>
+  analysisCard.innerHTML = `
+    <h4>Email Analysis & Urgency — <span style="color: var(--accent-color);">${data.priority || 'General'}</span></h4>
     <p style="margin: 8px 0;"><strong>Summary:</strong> ${data.summary || 'N/A'}</p>
     <p><strong>Deadline:</strong> ${data.deadline || 'N/A'}</p>
-    <p style="margin-top: 4px;"><strong>Action:</strong> ${data.action_item || 'N/A'}</p>
-    <ul style="margin-left: 20px; margin-top: 8px;">${points}</ul>
+    <p style="margin-top: 4px;"><strong>Recommended Action:</strong> ${data.action_item || 'N/A'}</p>
+    <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;">${points}</ul>
   `;
 }
 
@@ -128,7 +153,7 @@ async function generateReply() {
   }
 
   if (!voiceNote) {
-    alert('Please enter or record a voice directive first!');
+    alert('Please enter or dictate your rough reply instruction first!');
     if (voiceNoteInput) voiceNoteInput.focus();
     return;
   }
@@ -139,7 +164,7 @@ async function generateReply() {
   }
   
   if (outputDiv) outputDiv.classList.remove('hidden');
-  if (draftText) draftText.innerText = 'Drafting email response...';
+  if (draftText) draftText.innerText = 'Drafting email response with Gemini...';
 
   try {
     const res = await fetch(`${API_BASE}/reply`, {
@@ -158,7 +183,7 @@ async function generateReply() {
   } finally {
     if (generateBtn) {
       generateBtn.disabled = false;
-      generateBtn.innerText = 'Generate Reply';
+      generateBtn.innerText = 'Generate Smart Reply';
     }
   }
 }
