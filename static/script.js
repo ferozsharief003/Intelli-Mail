@@ -1,7 +1,6 @@
-// Relative path allows seamlessly hosting on local, LAN, or production servers
 const API_BASE = '/api';
 let selectedEmailContent = '';
-let currentAbortController = null; // Prevents race conditions and state sticking
+let currentAbortController = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchEmails();
@@ -9,6 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const generateBtn = document.getElementById('generate-btn');
   if (generateBtn) {
     generateBtn.addEventListener('click', generateReply);
+  }
+
+  // Voice Assistant demonstration button hook
+  const voiceDemoBtn = document.getElementById('voice-assistant-btn');
+  const voiceInput = document.getElementById('voice-input');
+  if (voiceDemoBtn && voiceInput) {
+    voiceDemoBtn.addEventListener('click', () => {
+      voiceDemoBtn.classList.add('listening');
+      voiceDemoBtn.innerText = '🔴 Listening...';
+      voiceInput.value = '';
+      
+      setTimeout(() => {
+        voiceInput.value = "Acknowledge the request, state that finance clearance is underway, and commit to delivering the final breakdown on schedule.";
+        voiceDemoBtn.classList.remove('listening');
+        voiceDemoBtn.innerText = '🎙️ Voice Assistant';
+      }, 1500);
+    });
   }
 });
 
@@ -42,20 +58,17 @@ async function fetchEmails() {
       `;
 
       card.addEventListener('click', () => {
-        // Prevent re-triggering if clicking the currently selected email
         if (card.classList.contains('selected')) return;
 
         document.querySelectorAll('.email-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         selectedEmailContent = email.content;
         
-        // Switch workspace from placeholder to active detail view smoothly
         const placeholder = document.getElementById('workspace-placeholder');
         const activeWorkspace = document.getElementById('active-workspace');
         if (placeholder) placeholder.classList.add('hidden');
         if (activeWorkspace) activeWorkspace.classList.remove('hidden');
 
-        // Populate email detail view fields
         const detailSubject = document.getElementById('detail-subject');
         const detailSender = document.getElementById('detail-sender');
         const detailTime = document.getElementById('detail-time');
@@ -66,7 +79,6 @@ async function fetchEmails() {
         if (detailTime) detailTime.innerText = email.timestamp || '';
         if (detailBody) detailBody.innerText = email.content || '';
 
-        // Hide stale reply draft on email switch
         const outputDiv = document.getElementById('reply-output');
         if (outputDiv) outputDiv.classList.add('hidden');
 
@@ -75,7 +87,6 @@ async function fetchEmails() {
 
       container.appendChild(card);
 
-      // Auto-select first email on initial load to populate workspace instantly
       if (index === 0) card.click();
     });
   } catch (err) {
@@ -84,19 +95,17 @@ async function fetchEmails() {
   }
 }
 
-// 2. Analyze selected email safely without glitches
+// 2. Analyze selected email safely
 async function analyzeEmail(content) {
   const analysisCard = document.getElementById('analysis-card');
   const analysisText = document.getElementById('analysis-text');
   if (!analysisCard || !analysisText) return;
 
-  // Abort any ongoing pending fetch from previous fast-clicks
   if (currentAbortController) {
     currentAbortController.abort();
   }
   currentAbortController = new AbortController();
 
-  // Subtle opacity state change prevents layout collapse/jump
   analysisCard.style.opacity = '0.5';
   analysisText.innerText = 'Analyzing message with Gemini AI...';
 
@@ -119,6 +128,7 @@ async function analyzeEmail(content) {
   }
 }
 
+// Render analysis including Calendar Deadline Widget
 function renderAnalysis(data) {
   const analysisCard = document.getElementById('analysis-card');
   if (!analysisCard) return;
@@ -130,9 +140,21 @@ function renderAnalysis(data) {
   analysisCard.innerHTML = `
     <h4>Email Analysis & Urgency — <span style="color: var(--accent-color);">${data.priority || 'General'}</span></h4>
     <p style="margin: 8px 0;"><strong>Summary:</strong> ${data.summary || 'N/A'}</p>
-    <p><strong>Deadline:</strong> ${data.deadline || 'N/A'}</p>
     <p style="margin-top: 4px;"><strong>Recommended Action:</strong> ${data.action_item || 'N/A'}</p>
-    <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;">${points}</ul>
+    
+    <div class="calendar-deadline-box">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <div>
+        <strong>Calendar Sync (Deadline):</strong> <span style="color: var(--text-main);">${data.deadline || 'No immediate deadline'}</span>
+      </div>
+    </div>
+
+    <ul style="margin-left: 20px; margin-top: 10px; color: var(--text-muted); font-size: 0.9rem;">${points}</ul>
   `;
 }
 

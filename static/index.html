@@ -48,7 +48,7 @@
           </div>
         </div>
 
-        <!-- Active Email & AI Workspace (Hidden by default until an email is clicked) -->
+        <!-- Active Email & AI Workspace -->
         <div id="active-workspace" class="active-workspace hidden">
           
           <!-- Email Reading Header -->
@@ -70,13 +70,22 @@
           <div class="ai-intelligence-panel">
             <h3>🤖 Gemini AI Intelligence Panel</h3>
             
+            <!-- Analysis Card -->
             <div id="analysis-card" class="ai-card">
               <h4>Email Analysis & Urgency</h4>
               <p id="analysis-text" class="analysis-content">Select an email to run analysis.</p>
             </div>
 
+            <!-- Voice & Tone Smart Reply Section -->
             <div class="ai-card reply-section">
-              <h4>🎙️ Voice & Tone Smart Reply</h4>
+              <div class="reply-card-header">
+                <h4>🎙️ Voice & Tone Smart Reply</h4>
+                <!-- Voice Assistant Demonstration Button for Judges/Walkthroughs -->
+                <button id="voice-assistant-btn" class="btn-voice-demo" title="Click to simulate voice dictation">
+                  🎙️ Voice Assistant
+                </button>
+              </div>
+
               <textarea id="voice-input" placeholder="Type or dictate your rough reply instruction (e.g., 'Tell them I will send the breakdown by 4 PM')..."></textarea>
               
               <div class="controls">
