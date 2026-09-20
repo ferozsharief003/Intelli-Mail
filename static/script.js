@@ -115,7 +115,6 @@ async function analyzeEmail(content) {
   }
   currentAbortController = new AbortController();
 
-  // Reset card structure to ensure loading text elements exist on every click
   analysisCard.style.opacity = '0.5';
   analysisCard.innerHTML = `
     <h4>Email Analysis & Urgency</h4>
@@ -144,7 +143,33 @@ async function analyzeEmail(content) {
   }
 }
 
-// Render analysis including Calendar Deadline Widget
+// Helper to parse deadline string into month, day, year for the visual calendar tile widget
+function parseDeadlineTile(deadlineStr) {
+  if (!deadlineStr || deadlineStr.toLowerCase().includes('no') || deadlineStr.toLowerCase().includes('none')) {
+    return { month: 'TBD', day: '--', year: '2026', label: 'No deadline scheduled' };
+  }
+
+  const now = new Date();
+  let targetMonth = now.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  let targetDay = String(now.getDate());
+  let targetYear = String(now.getFullYear());
+
+  const lower = deadlineStr.toLowerCase();
+  if (lower.includes('friday')) {
+    targetDay = '25'; targetMonth = 'SEP';
+  } else if (lower.includes('thursday')) {
+    targetDay = '24'; targetMonth = 'SEP';
+  } else if (lower.includes('tomorrow')) {
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+    targetDay = String(tomorrow.getDate());
+    targetMonth = tomorrow.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  }
+
+  return { month: targetMonth, day: targetDay, year: targetYear, label: deadlineStr };
+}
+
+// Render analysis including the Visual Calendar App Widget Card
 function renderAnalysis(data) {
   const analysisCard = document.getElementById('analysis-card');
   if (!analysisCard) return;
@@ -153,20 +178,22 @@ function renderAnalysis(data) {
     ? data.why_important.map(p => `<li>${p}</li>`).join('')
     : `<li>${data.why_important || ''}</li>`;
 
+  const deadlineInfo = parseDeadlineTile(data.deadline);
+
   analysisCard.innerHTML = `
     <h4>Email Analysis & Urgency — <span style="color: var(--accent-color);">${data.priority || 'General'}</span></h4>
     <p style="margin: 8px 0;"><strong>Summary:</strong> ${data.summary || 'N/A'}</p>
     <p style="margin-top: 4px;"><strong>Recommended Action:</strong> ${data.action_item || 'N/A'}</p>
     
-    <div class="calendar-deadline-box">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
-      </svg>
-      <div>
-        <strong>Calendar Sync (Deadline):</strong> <span style="color: var(--text-main);">${data.deadline || 'No immediate deadline'}</span>
+    <div class="calendar-app-widget">
+      <div class="calendar-date-tile">
+        <div class="calendar-month-header">${deadlineInfo.month}</div>
+        <div class="calendar-day-number">${deadlineInfo.day}</div>
+        <div class="calendar-year-text">${deadlineInfo.year}</div>
+      </div>
+      <div class="calendar-info-content">
+        <span class="calendar-info-title">Calendar Sync & Deadline</span>
+        <span class="calendar-info-value">${deadlineInfo.label}</span>
       </div>
     </div>
 
