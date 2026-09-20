@@ -105,19 +105,22 @@ async function fetchEmails() {
   }
 }
 
-// 2. Analyze selected email safely
+// 2. Analyze selected email safely with proper element preservation
 async function analyzeEmail(content) {
   const analysisCard = document.getElementById('analysis-card');
-  const analysisText = document.getElementById('analysis-text');
-  if (!analysisCard || !analysisText) return;
+  if (!analysisCard) return;
 
   if (currentAbortController) {
     currentAbortController.abort();
   }
   currentAbortController = new AbortController();
 
+  // Reset card structure to ensure loading text elements exist on every click
   analysisCard.style.opacity = '0.5';
-  analysisText.innerText = 'Analyzing message with Gemini AI...';
+  analysisCard.innerHTML = `
+    <h4>Email Analysis & Urgency</h4>
+    <p id="analysis-text" class="analysis-content">Analyzing message with Gemini AI...</p>
+  `;
 
   try {
     const res = await fetch(`${API_BASE}/analyze`, {
@@ -131,7 +134,10 @@ async function analyzeEmail(content) {
     renderAnalysis(data);
   } catch (err) {
     if (err.name !== 'AbortError') {
-      analysisText.innerHTML = `<span style="color: #ef4444;">Error processing AI analysis.</span>`;
+      const analysisText = document.getElementById('analysis-text');
+      if (analysisText) {
+        analysisText.innerHTML = `<span style="color: #ef4444;">Error processing AI analysis.</span>`;
+      }
     }
   } finally {
     analysisCard.style.opacity = '1';
@@ -153,7 +159,7 @@ function renderAnalysis(data) {
     <p style="margin-top: 4px;"><strong>Recommended Action:</strong> ${data.action_item || 'N/A'}</p>
     
     <div class="calendar-deadline-box">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
         <line x1="16" y1="2" x2="16" y2="6"></line>
         <line x1="8" y1="2" x2="8" y2="6"></line>
