@@ -156,30 +156,37 @@ async function analyzeEmail(content) {
   }
 }
 
-// Helper to parse deadline string into month, day, year for the visual calendar tile widget
+// Dynamic helper to parse deadline string into relative target date
 function parseDeadlineTile(deadlineStr) {
   if (!deadlineStr || deadlineStr.toLowerCase().includes('no') || deadlineStr.toLowerCase().includes('none')) {
-    return { month: 'TBD', day: '--', year: '2026', label: 'No deadline scheduled' };
+    return { month: 'TBD', day: '--', year: new Date().getFullYear().toString(), label: 'No deadline scheduled' };
   }
 
   const now = new Date();
-  let targetMonth = now.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-  let targetDay = String(now.getDate());
-  let targetYear = String(now.getFullYear());
+  let targetDate = new Date();
 
   const lower = deadlineStr.toLowerCase();
-  if (lower.includes('friday')) {
-    targetDay = '25'; targetMonth = 'SEP';
-  } else if (lower.includes('thursday')) {
-    targetDay = '24'; targetMonth = 'SEP';
-  } else if (lower.includes('saturday')) {
-    targetDay = '26'; targetMonth = 'SEP';
+  
+  if (lower.includes('today')) {
+    targetDate = now;
   } else if (lower.includes('tomorrow')) {
-    const tomorrow = new Date();
-    tomorrow.setDate(now.getDate() + 1);
-    targetDay = String(tomorrow.getDate());
-    targetMonth = tomorrow.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    targetDate.setDate(now.getDate() + 1);
+  } else {
+    // Search for day names and offset from today
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const foundDayIndex = days.findIndex(day => lower.includes(day));
+    
+    if (foundDayIndex !== -1) {
+      const currentDayIndex = now.getDay();
+      let diff = foundDayIndex - currentDayIndex;
+      if (diff <= 0) diff += 7; // Next occurrence of that weekday
+      targetDate.setDate(now.getDate() + diff);
+    }
   }
+
+  const targetMonth = targetDate.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+  const targetDay = String(targetDate.getDate());
+  const targetYear = String(targetDate.getFullYear());
 
   return { month: targetMonth, day: targetDay, year: targetYear, label: deadlineStr };
 }
