@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IntelliMail - Smart Email Priority Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="navbar">
+      <h1>⚡ IntelliMail AI</h1>
+      <p class="tagline">Smart Email Categorization & Voice Assistant</p>
+    </header>
+
+    <main class="dashboard">
+      <!-- Left Column: Email List / Heatmap -->
+      <section class="email-section">
+        <h2>📥 Inbox Heatmap</h2>
+        <div id="email-list" class="email-list">
+          <p class="loading">Loading emails from backend...</p>
+        </div>
+      </section>
+
+      <!-- Right Column: AI Insights & Voice Reply -->
+      <section class="ai-section">
+        <h2>🤖 AI Intelligence Panel</h2>
+        
+        <div id="analysis-card" class="card analysis-card">
+          <h3>Email Analysis</h3>
+          <p class="placeholder-text">Select an email from the inbox to analyze.</p>
+        </div>
+
+        <div class="card reply-card">
+          <h3>🎙️ Voice & Tone Smart Reply</h3>
+          <textarea id="voice-input" placeholder="Type or dictate your rough reply instruction (e.g., 'Tell them I will send the breakdown by 4 PM')..."></textarea>
+          
+          <div class="controls">
+            <label for="tone-select">Select Tone:</label>
+            <select id="tone-select">
+              <option value="Professional">Professional</option>
+              <option value="Concise">Concise</option>
+              <option value="Polite Refusal">Polite Refusal</option>
+            </select>
+            <button id="generate-btn" class="btn-primary">Generate Reply</button>
+          </div>
+
+          <div id="reply-output" class="reply-output hidden">
+            <h4>Generated Draft:</h4>
+            <div id="draft-text" class="draft-text"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

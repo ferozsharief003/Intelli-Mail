@@ -1,0 +1,26 @@
+[
+  {
+    "id": "email-1",
+    "sender": "Ramesh Sharma (Senior Client)",
+    "subject": "URGENT: Confirmation needed for Q4 Project Proposal",
+    "timestamp": "Today, 09:15 AM",
+    "category": "critical",
+    "content": "Hi Anwar, I hope you are doing well. We reviewed the preliminary draft for the Q4 proposal. We need your final confirmation and cost estimation breakdown sent over by 5:00 PM today so we can clear it with finance. Please let me know if you need additional details."
+  },
+  {
+    "id": "email-2",
+    "sender": "Dev Team Lead",
+    "subject": "Sprint Progress & API Specs Sync",
+    "timestamp": "Today, 10:30 AM",
+    "category": "reply_today",
+    "content": "Hey team, just checking in regarding the new API endpoints for the dashboard. Please submit your revised documentation by Friday noon so Jayasri can integrate the new screens."
+  },
+  {
+    "id": "email-3",
+    "sender": "Tech Digest Newsletter",
+    "subject": "Top 10 AI Tools Transforming Workflows in 2026",
+    "timestamp": "Yesterday, 04:00 PM",
+    "category": "fyi",
+    "content": "Welcome to this week's edition! Discover how rapid prototyping tools, LLMs, and multi-modal voice agents are changing developer productivity across modern teams."
+  }
+]
