@@ -3,10 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IntelliMail - Gmail Workspace</title>
+  <title>IntelliMail - Google Workspace</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- Google Workspace Loading Splash Screen -->
+  <div id="app-loader" class="app-loader">
+    <div class="loader-content">
+      <div class="gmail-logo-loader">
+        <svg viewBox="0 0 75 60" width="90" height="72">
+          <path fill="#EA4335" d="M37.5 32.4L75 10.5V52.5C75 55.5 72.5 58 69.5 58H5.5C2.5 58 0 55.5 0 52.5V10.5L37.5 32.4Z"/>
+          <path fill="#4285F4" d="M0 10.5L37.5 32.4L75 10.5V5.5C75 2.5 72.5 0 69.5 0H5.5C2.5 0 0 2.5 0 5.5V10.5Z"/>
+          <path fill="#FBBC05" d="M0 10.5V52.5C0 55.5 2.5 58 5.5 58H17.5V23.5L0 10.5Z"/>
+          <path fill="#34A853" d="M75 10.5V52.5C75 55.5 72.5 58 69.5 58H57.5V23.5L75 10.5Z"/>
+          <path fill="#C5221F" d="M17.5 23.5L37.5 36.5L57.5 23.5V58H17.5V23.5Z"/>
+        </svg>
+      </div>
+      <div class="loading-bar-container">
+        <div class="loading-bar-progress"></div>
+      </div>
+      <div class="workspace-branding">
+        <span class="google-text">Google</span> <span class="workspace-text">Workspace</span>
+      </div>
+    </div>
+  </div>
+
   <div class="gmail-app-container">
     
     <!-- Top Navigation Bar -->
@@ -80,7 +102,6 @@
             <div class="ai-card reply-section">
               <div class="reply-card-header">
                 <h4>🎙️ Voice & Tone Smart Reply</h4>
-                <!-- Voice Assistant Demonstration Button for Judges/Walkthroughs -->
                 <button id="voice-assistant-btn" class="btn-voice-demo" title="Click to simulate voice dictation">
                   🎙️ Voice Assistant
                 </button>

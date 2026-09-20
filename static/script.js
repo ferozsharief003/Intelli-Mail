@@ -28,6 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Hide loader function
+function hideLoader() {
+  const loader = document.getElementById('app-loader');
+  if (loader) {
+    loader.classList.add('fade-out');
+  }
+}
+
 // 1. Fetch emails list
 async function fetchEmails() {
   const container = document.getElementById('email-list');
@@ -92,6 +100,8 @@ async function fetchEmails() {
   } catch (err) {
     container.innerHTML = `<p style="color: #ef4444; padding: 16px;">Failed to connect to backend. Ensure app.py is running.</p>`;
     if (countBadge) countBadge.innerText = 'Error';
+  } finally {
+    hideLoader();
   }
 }
 
