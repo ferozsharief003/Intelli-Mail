@@ -36,7 +36,7 @@ function hideLoader() {
   }
 }
 
-// 1. Fetch emails list
+// 1. Fetch emails list with dynamic sorting by priority
 async function fetchEmails() {
   const container = document.getElementById('email-list');
   const countBadge = document.getElementById('email-count');
@@ -44,7 +44,20 @@ async function fetchEmails() {
 
   try {
     const res = await fetch(`${API_BASE}/emails`);
-    const emails = await res.json();
+    let emails = await res.json();
+
+    // Sort priority: critical (1) -> reply_today (2) -> fyi (3)
+    const priorityWeight = {
+      "critical": 1,
+      "reply_today": 2,
+      "fyi": 3
+    };
+
+    emails.sort((a, b) => {
+      const weightA = priorityWeight[a.category] || 3;
+      const weightB = priorityWeight[b.category] || 3;
+      return weightA - weightB;
+    });
 
     if (countBadge) {
       countBadge.innerText = `${emails.length} messages`;
@@ -159,6 +172,8 @@ function parseDeadlineTile(deadlineStr) {
     targetDay = '25'; targetMonth = 'SEP';
   } else if (lower.includes('thursday')) {
     targetDay = '24'; targetMonth = 'SEP';
+  } else if (lower.includes('saturday')) {
+    targetDay = '26'; targetMonth = 'SEP';
   } else if (lower.includes('tomorrow')) {
     const tomorrow = new Date();
     tomorrow.setDate(now.getDate() + 1);

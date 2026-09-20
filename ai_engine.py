@@ -9,7 +9,7 @@ def analyze_email_content(email_text):
         return {
             "priority": "🟢 FYI",
             "summary": "No content provided.",
-            "deadline": "None",
+            "deadline": "No deadline scheduled",
             "action_item": "None",
             "why_important": ["Empty email content"]
         }
@@ -112,7 +112,7 @@ def analyze_email_content(email_text):
         return {
             "priority": "🟢 FYI",
             "summary": "Weekly technology update summarizing top AI tools, productivity frameworks, and workflow automation trends for 2026.",
-            "deadline": "No strict deadline",
+            "deadline": "No deadline scheduled",
             "action_item": "Optional reading; save or forward relevant items to the team.",
             "why_important": [
                 "Informational content requiring no immediate reply",
@@ -138,7 +138,7 @@ def analyze_email_content(email_text):
         return {
             "priority": "🟢 FYI",
             "summary": "Liam checked out the latest staging build and shared design feedback regarding mobile secondary border contrast.",
-            "deadline": "No strict deadline",
+            "deadline": "No deadline scheduled",
             "action_item": "Review UI contrast adjustments when picking up frontend polish tasks.",
             "why_important": [
                 "Collaborative design critique for mobile UX",
@@ -151,7 +151,7 @@ def analyze_email_content(email_text):
         return {
             "priority": "🟢 FYI",
             "summary": "General informational correspondence received.",
-            "deadline": "No strict deadline",
+            "deadline": "No deadline scheduled",
             "action_item": "Review message contents at your convenience.",
             "why_important": [
                 "Standard administrative notification",
@@ -166,7 +166,6 @@ def generate_tone_reply(email_text, voice_note, tone="Professional"):
     """
     email_lower = (email_text or "").lower()
     
-    # Determine appropriate recipient context
     if any(k in email_lower for k in ["ramesh", "proposal", "cost estimation"]):
         recipient = "Ramesh"
     elif any(k in email_lower for k in ["demo", "procurement", "board of directors"]):
@@ -186,7 +185,6 @@ def generate_tone_reply(email_text, voice_note, tone="Professional"):
 
     if tone == "Concise":
         return f"Hi {recipient},\n\n{directive_clean}\n\nBest,\nAnwar"
-    
     elif tone == "Polite Refusal":
         return (
             f"Hi {recipient},\n\n"
@@ -194,7 +192,6 @@ def generate_tone_reply(email_text, voice_note, tone="Professional"):
             f"Regarding your update ({directive_clean}), I will need additional time before proceeding.\n\n"
             f"Best regards,\nAnwar"
         )
-    
     else:  # Professional
         return (
             f"Hi {recipient},\n\n"
