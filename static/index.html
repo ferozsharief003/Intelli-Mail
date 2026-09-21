@@ -3,53 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IntelliMail - AI-Powered Email Intelligence</title>
-  <!-- Added missing Google Fonts for proper UI rendering -->
+  <title>IntelliMail — AI Email Workspace</title>
+  
+  <!-- Inter & Roboto Fonts for Clean SaaS Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- IntelliMail Loading Splash Screen with Custom AI Logo -->
+  <!-- 1. INITIAL APP LOADER / SPLASH SCREEN -->
   <div id="app-loader" class="app-loader">
     <div class="loader-content">
-      <div class="gmail-logo-loader">
-        <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="#8ab4f8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-          <path d="M18 2l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z" fill="#8ab4f8" stroke="none"></path>
+      <div class="logo-loader-icon">
+        <svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
         </svg>
       </div>
       <div class="loading-bar-container">
         <div class="loading-bar-progress"></div>
       </div>
       <div class="workspace-branding">
-        <span class="google-text">Intelli</span><span class="workspace-text">Mail</span>
+        <span class="brand-spark">Intelli</span><span class="brand-light">Mail</span>
       </div>
     </div>
   </div>
 
+  <!-- 2. MAIN APPLICATION CONTAINER -->
   <div class="gmail-app-container">
     
-    <!-- Top Navigation Bar -->
+    <!-- TOP NAVBAR -->
     <header class="gmail-navbar">
       <div class="nav-brand">
-        <h1>⚡ IntelliMail</h1>
+        <div class="logo-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </div>
+        <h1>IntelliMail</h1>
         <span class="badge-pro">AI Workspace</span>
       </div>
+
       <div class="nav-search">
-        <!-- Removed 'disabled' attribute so the UI looks fully functional -->
-        <input type="text" placeholder="Search mail or AI intelligence..." />
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search mail or AI intelligence..." />
       </div>
     </header>
 
-    <!-- Main Split-Pane Workspace -->
+    <!-- MAIN WORKSPACE -->
     <main class="gmail-main">
       
-      <!-- Left Pane: Email List (Inbox Feed) -->
+      <!-- LEFT SIDEBAR: INBOX FEED -->
       <aside class="gmail-sidebar">
         <div class="sidebar-header">
           <h2>Inbox</h2>
@@ -60,79 +67,146 @@
         </div>
       </aside>
 
-      <!-- Right Pane: Email Reading View & AI Intelligence Panel -->
+      <!-- RIGHT PANE: READING & AI WORKSPACE -->
       <section id="email-workspace" class="gmail-workspace">
-        <!-- Default State when no email is selected -->
+        
+        <!-- DEFAULT PLACEHOLDER (When no email is selected) -->
         <div id="workspace-placeholder" class="workspace-placeholder">
           <div class="placeholder-content">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
+            <div class="placeholder-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
             <h3>Select an email to view intelligence</h3>
-            <p>Choose an item from your inbox list on the left to inspect content, analyze sentiment, and generate AI smart replies.</p>
+            <p>Choose an email from your inbox to inspect content, analyze urgency, and generate AI replies.</p>
           </div>
         </div>
 
-        <!-- Active Email & AI Workspace -->
+        <!-- ACTIVE WORKSPACE (Slides in smoothly when email is opened) -->
         <div id="active-workspace" class="active-workspace hidden">
           
-          <!-- Email Reading Header -->
-          <div class="email-detail-header">
-            <h2 id="detail-subject" class="detail-subject">Email Subject</h2>
-            <div class="email-meta-info">
-              <span id="detail-sender">From: sender@example.com</span>
-              <span id="detail-time" class="detail-time">Time</span>
-            </div>
+          <!-- GMAIL ACTION TOOLBAR -->
+          <div class="action-toolbar">
+            <button id="btn-back" class="icon-btn" title="Back to Inbox">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+              </svg>
+            </button>
+            <div class="toolbar-divider"></div>
+            <button id="btn-archive" class="icon-btn" title="Archive">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="21 8 21 21 3 21 3 8"/><rect width="22" height="5" x="1" y="3"/><line x1="10" x2="14" y1="12" y2="12"/>
+              </svg>
+            </button>
+            <button id="btn-spam" class="icon-btn" title="Report Spam">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/>
+              </svg>
+            </button>
+            <button id="btn-delete" class="icon-btn" title="Delete">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+              </svg>
+            </button>
           </div>
 
-          <!-- Email Full Body Content -->
-          <div class="email-body-box">
-            <h4>Message Content:</h4>
-            <p id="detail-body">Full email body text goes here...</p>
-          </div>
-
-          <!-- AI Intelligence & Analysis Panel -->
-          <div class="ai-intelligence-panel">
-            <h3>🤖 Gemini AI Intelligence Panel</h3>
+          <!-- SCROLLABLE DETAIL CONTAINER -->
+          <div class="workspace-scroll-area">
             
-            <!-- Analysis Card -->
-            <div id="analysis-card" class="ai-card">
-              <h4>Email Analysis & Urgency</h4>
-              <p id="analysis-text" class="analysis-content">Select an email to run analysis.</p>
+            <!-- EMAIL DETAIL CARD -->
+            <div class="email-detail-header">
+              <div class="subject-row">
+                <h2 id="detail-subject" class="detail-subject">Email Subject</h2>
+                <span id="detail-time" class="detail-time">Time</span>
+              </div>
+              <div class="email-meta-info">
+                <span id="detail-sender">From: sender@example.com</span>
+              </div>
             </div>
 
-            <!-- Voice & Tone Smart Reply Section -->
-            <div class="ai-card reply-section">
-              <div class="reply-card-header">
-                <h4>🎙️ Voice & Tone Smart Reply</h4>
-                <button id="voice-assistant-btn" class="btn-voice-demo" title="Click to simulate voice dictation">
-                  🎙️ Voice Assistant
-                </button>
-              </div>
+            <!-- MESSAGE CONTENT -->
+            <div class="email-body-box">
+              <span class="field-label">MESSAGE CONTENT</span>
+              <p id="detail-body">Full email body text goes here...</p>
+            </div>
 
-              <textarea id="voice-input" placeholder="Type or dictate your rough reply instruction (e.g., 'Tell them I will send the breakdown by 4 PM')..."></textarea>
-              
-              <div class="controls">
-                <div class="tone-wrapper">
-                  <label for="tone-select">Tone:</label>
-                  <select id="tone-select">
-                    <option value="Professional">Professional</option>
-                    <option value="Concise">Concise</option>
-                    <option value="Polite Refusal">Polite Refusal</option>
-                  </select>
+            <!-- GEMINI AI INTELLIGENCE PANEL -->
+            <div class="ai-intelligence-panel">
+              <div class="ai-panel-title">
+                <div class="ai-badge-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                  </svg>
                 </div>
-                <button id="generate-btn" class="btn-primary">Generate Smart Reply</button>
+                <h3>Gemini AI Intelligence Panel</h3>
+              </div>
+              
+              <!-- Priority & Analysis Summary Card -->
+              <div id="analysis-card" class="ai-card">
+                <div class="urgency-row">
+                  <span class="field-label">PRIORITY:</span>
+                  <span id="ai-priority" class="priority-tag">CRITICAL</span>
+                </div>
+                <div id="analysis-text" class="analysis-content">
+                  <div class="summary-item"><strong>Summary:</strong> <span id="ai-summary">--</span></div>
+                  <div class="summary-item"><strong>Recommended Action:</strong> <span id="ai-action">--</span></div>
+                </div>
+
+                <!-- Calendar Deadline Sync Widget -->
+                <div class="deadline-widget">
+                  <div class="calendar-badge">
+                    <span class="cal-month">SCHEDULE</span>
+                    <span class="cal-day">⏰</span>
+                  </div>
+                  <div class="deadline-info">
+                    <span class="widget-label">ACTION DEADLINE</span>
+                    <div id="ai-deadline" class="deadline-text">No deadline scheduled</div>
+                  </div>
+                </div>
+
+                <ul id="ai-reasons" class="reasons-list"></ul>
               </div>
 
-              <div id="reply-output" class="reply-output hidden">
-                <h4>Generated Draft:</h4>
-                <div id="draft-text" class="draft-text"></div>
+              <!-- Voice & Tone Smart Reply Section -->
+              <div class="ai-card reply-section">
+                <div class="reply-card-header">
+                  <span class="field-label">AI DRAFT GENERATOR</span>
+                  <button id="voice-assistant-btn" class="btn-voice-demo" title="Click to simulate voice dictation">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="22"/>
+                    </svg>
+                    <span>Voice Assistant</span>
+                  </button>
+                </div>
+
+                <textarea id="voice-input" placeholder="Type or dictate your rough reply instruction (e.g., 'Tell them I will send the breakdown by 4 PM')..."></textarea>
+                
+                <div class="controls">
+                  <div class="tone-wrapper">
+                    <label for="tone-select">Tone:</label>
+                    <select id="tone-select">
+                      <option value="Professional">Professional</option>
+                      <option value="Concise">Concise</option>
+                      <option value="Polite Refusal">Polite Refusal</option>
+                    </select>
+                  </div>
+                  <button id="generate-btn" class="btn-primary">Generate Smart Reply</button>
+                </div>
+
+                <div id="reply-output" class="reply-output hidden">
+                  <span class="field-label">GENERATED DRAFT</span>
+                  <div id="draft-text" class="draft-text"></div>
+                </div>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
+
       </section>
 
     </main>

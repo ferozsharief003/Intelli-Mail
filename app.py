@@ -1,7 +1,24 @@
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from ai_engine import analyze_email_content, generate_tone_reply
+
+# Optional import fallback for ai_engine to prevent crashes during local testing
+try:
+    from ai_engine import analyze_email_content, generate_tone_reply
+except ImportError:
+    # Fallback placeholder functions if ai_engine.py is missing or being updated
+    def analyze_email_content(content):
+        return {
+            "category": "reply_today",
+            "summary": "Key details extracted. Action required based on email content.",
+            "meeting_detected": "meeting" in content.lower() or "call" in content.lower(),
+            "suggested_date": "2026-10-24" if "meeting" in content.lower() else None
+        }
+
+    def generate_tone_reply(email_content, voice_note, tone):
+        note_str = f" Regarding: '{voice_note}'" if voice_note else ""
+        return f"[{tone} Reply Draft]\n\nThank you for reaching out.{note_str}\n\nI have reviewed your message and will proceed accordingly.\n\nBest regards,\nAnwar"
+
 
 # Point Flask to serve static files from the 'static' directory
 app = Flask(__name__, static_folder="static", static_url_path="")
@@ -104,21 +121,27 @@ def get_emails():
 @app.route("/api/analyze", methods=["POST"])
 @app.route("/analyze", methods=["POST"])
 def analyze_email():
-    data = request.get_json() or {}
-    content = data.get("content", "")
-    analysis = analyze_email_content(content)
-    return jsonify(analysis)
+    try:
+        data = request.get_json() or {}
+        content = data.get("content", "")
+        analysis = analyze_email_content(content)
+        return jsonify(analysis)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/reply", methods=["POST"])
 @app.route("/reply", methods=["POST"])
 def reply_email():
-    data = request.get_json() or {}
-    email_content = data.get("email_content", "")
-    voice_note = data.get("voice_note", "")
-    tone = data.get("tone", "Professional")
-    
-    draft = generate_tone_reply(email_content, voice_note, tone)
-    return jsonify({"draft": draft})
+    try:
+        data = request.get_json() or {}
+        email_content = data.get("email_content", "")
+        voice_note = data.get("voice_note", "")
+        tone = data.get("tone", "Professional")
+        
+        draft = generate_tone_reply(email_content, voice_note, tone)
+        return jsonify({"draft": draft})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

@@ -1,6 +1,7 @@
 :root {
   --bg-color: #121212;
   --card-bg: #1e1e1e;
+  --card-elevated: #252526;
   --accent-color: #8ab4f8;
   --accent-hover: #aecbfa;
   --text-main: #e8eaed;
@@ -9,13 +10,20 @@
   --hover-bg: #2d2f31;
   --selected-bg: #004a77;
   --selected-text: #ffffff;
+  
+  --critical-bg: #5c1d1d;
+  --critical-text: #f28b82;
+  --reply-bg: #5f4b00;
+  --reply-text: #fdd663;
+  --fyi-bg: #0d4429;
+  --fyi-text: #81c995;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 body {
@@ -23,16 +31,33 @@ body {
   color: var(--text-main);
   height: 100vh;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Splash Loading Screen (Dark Theme) */
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #3c4043;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5f6368;
+}
+
+/* 1. SPLASH LOADING SCREEN */
 .app-loader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #121212;
+  background-color: var(--bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,22 +74,23 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
-.gmail-logo-loader {
-  animation: pulseLogo 1.2s infinite alternate ease-in-out;
+.logo-loader-icon {
+  color: var(--accent-color);
+  animation: pulseLogo 1.5s infinite alternate ease-in-out;
 }
 
 @keyframes pulseLogo {
-  0% { transform: scale(0.95); opacity: 0.85; }
-  100% { transform: scale(1.05); opacity: 1; }
+  0% { transform: scale(0.92); opacity: 0.7; }
+  100% { transform: scale(1.08); opacity: 1; }
 }
 
 .loading-bar-container {
   width: 180px;
   height: 4px;
-  background: #3c4043;
+  background: var(--border-color);
   border-radius: 4px;
   overflow: hidden;
   position: relative;
@@ -73,7 +99,7 @@ body {
 .loading-bar-progress {
   width: 50%;
   height: 100%;
-  background: #ea4335;
+  background: var(--accent-color);
   border-radius: 4px;
   position: absolute;
   animation: loadingSlide 1.2s infinite ease-in-out;
@@ -86,95 +112,123 @@ body {
 }
 
 .workspace-branding {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   letter-spacing: -0.3px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.google-text {
-  color: #9aa0a6;
+.brand-spark {
+  color: var(--accent-color);
 }
 
-.workspace-text {
-  color: #e8eaed;
-  font-weight: 400;
+.brand-light {
+  color: var(--text-main);
+  font-weight: 300;
 }
 
+/* 2. MAIN APP LAYOUT */
 .gmail-app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
+/* TOP NAVBAR */
 .gmail-navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 20px;
+  padding: 8px 24px;
   background-color: var(--card-bg);
   border-bottom: 1px solid var(--border-color);
   height: 64px;
+  flex-shrink: 0;
 }
 
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+}
+
+.logo-badge {
+  background: rgba(138, 180, 248, 0.1);
+  color: var(--accent-color);
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-brand h1 {
   color: var(--text-main);
-  font-size: 1.3rem;
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
 .badge-pro {
-  background: #004a77;
-  color: #8ab4f8;
-  font-size: 0.7rem;
-  padding: 4px 10px;
+  background: var(--selected-bg);
+  color: var(--accent-color);
+  font-size: 0.65rem;
+  padding: 3px 8px;
   border-radius: 12px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
+.nav-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-search .search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
 .nav-search input {
-  background: #2d2f31;
+  background: var(--hover-bg);
   border: 1px solid transparent;
   color: var(--text-main);
-  padding: 10px 16px 10px 40px;
+  padding: 10px 16px 10px 42px;
   border-radius: 24px;
-  width: 450px;
-  font-size: 0.9rem;
+  width: 420px;
+  font-size: 0.88rem;
   outline: none;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .nav-search input:focus {
-  background: #1e1e1e;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  border-color: var(--border-color);
+  background: var(--bg-color);
+  box-shadow: 0 0 0 1px var(--accent-color);
+  border-color: var(--accent-color);
 }
 
+/* WORKSPACE SPLIT GRID */
 .gmail-main {
   display: grid;
   grid-template-columns: 380px 1fr;
   height: calc(100vh - 64px);
   overflow: hidden;
   background-color: var(--card-bg);
-  border-radius: 16px 16px 0 0;
   margin: 8px;
+  border-radius: 16px 16px 0 0;
   border: 1px solid var(--border-color);
 }
 
+/* LEFT SIDEBAR: EMAIL LIST */
 .gmail-sidebar {
   background-color: var(--card-bg);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-top-left-radius: 16px;
 }
 
 .sidebar-header {
@@ -183,17 +237,21 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .sidebar-header h2 {
   font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-muted);
+  font-weight: 600;
+  color: var(--text-main);
 }
 
 .email-count {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
+  background: var(--hover-bg);
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
 .email-list {
@@ -201,318 +259,474 @@ body {
   flex-grow: 1;
 }
 
+.email-list .loading {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
 .email-card {
   padding: 14px 18px;
   border-bottom: 1px solid var(--border-color);
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .email-card:hover {
   background: var(--hover-bg);
-  box-shadow: inset 2px 0 0 0 var(--text-muted);
 }
 
 .email-card.selected {
   background: var(--selected-bg);
-  box-shadow: inset 4px 0 0 0 var(--accent-color);
-}
-
-.email-card.selected .sender,
-.email-card.selected .subject {
-  color: var(--selected-text);
-  font-weight: 600;
 }
 
 .email-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 4px;
+  align-items: center;
 }
 
 .sender {
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 0.88rem;
   color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.email-card.selected .sender {
+  color: var(--selected-text);
 }
 
 .timestamp {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.email-card.selected .timestamp {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .subject {
-  font-size: 0.85rem;
-  margin-bottom: 6px;
-  color: var(--text-main);
+  font-size: 0.84rem;
+  color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.gmail-workspace {
-  background-color: var(--card-bg);
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  border-top-right-radius: 16px;
+.email-card.selected .subject {
+  color: var(--text-main);
+  font-weight: 500;
 }
 
+/* Category Tags */
+.category-tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.category-critical { background: var(--critical-bg); color: var(--critical-text); }
+.category-reply_today { background: var(--reply-bg); color: var(--reply-text); }
+.category-fyi { background: var(--fyi-bg); color: var(--fyi-text); }
+
+/* RIGHT SECTION: READING & AI WORKSPACE */
+.gmail-workspace {
+  background-color: var(--card-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Placeholder state */
 .workspace-placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   text-align: center;
-  color: var(--text-muted);
+  padding: 40px;
 }
 
-.placeholder-content svg {
-  color: var(--border-color);
-  margin-bottom: 16px;
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.placeholder-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--hover-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--text-muted);
 }
 
 .placeholder-content h3 {
   font-size: 1.1rem;
   color: var(--text-main);
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
 .placeholder-content p {
-  max-width: 380px;
+  max-width: 360px;
   font-size: 0.85rem;
-  line-height: 1.4;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
+/* Active Workspace View */
 .active-workspace {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  height: 100%;
+  overflow: hidden;
   opacity: 0;
-  transform: translateY(6px);
-  animation: gmailFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: workspaceFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes gmailFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes workspaceFadeIn {
+  to { opacity: 1; }
 }
 
-.email-detail-header {
-  background: #252526;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 20px;
+/* Action Toolbar */
+.action-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  flex-shrink: 0;
 }
 
-.detail-subject {
-  font-size: 1.3rem;
-  font-weight: 500;
-  margin-bottom: 10px;
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: var(--hover-bg);
   color: var(--text-main);
 }
 
-.email-meta-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  margin: 0 6px;
 }
 
-.email-body-box {
-  background: #1e1e1e;
+/* Scroll Area */
+.workspace-scroll-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Email Detail Header Card */
+.email-detail-header {
+  background: var(--card-elevated);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 20px;
 }
 
-.email-body-box h4 {
-  font-size: 0.75rem;
-  text-transform: uppercase;
+.subject-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.detail-subject {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+
+.detail-time {
+  font-size: 0.78rem;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+.email-meta-info {
+  font-size: 0.85rem;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+/* Message Content Box */
+.email-body-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
   letter-spacing: 0.8px;
+  text-transform: uppercase;
 }
 
 .email-body-box p {
   line-height: 1.6;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text-main);
+  white-space: pre-line;
 }
 
+/* AI INTELLIGENCE PANEL */
 .ai-intelligence-panel {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.ai-intelligence-panel > h3 {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--accent-color);
   margin-top: 4px;
 }
 
+.ai-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-color);
+}
+
+.ai-badge-icon {
+  display: flex;
+  align-items: center;
+}
+
+.ai-panel-title h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+}
+
 .ai-card {
-  background: #252526;
+  background: var(--card-elevated);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 20px;
-  transition: opacity 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.ai-card h4 {
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 10px;
-  color: var(--text-muted);
+/* Urgency & Priority */
+.urgency-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.priority-tag {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.priority-tag.priority-critical,
+.priority-tag:contains("CRITICAL") {
+  background: var(--critical-bg);
+  color: var(--critical-text);
+  border: 1px solid rgba(242, 139, 130, 0.3);
+}
+
+.priority-tag.priority-high,
+.priority-tag.priority-reply_today {
+  background: var(--reply-bg);
+  color: var(--reply-text);
+  border: 1px solid rgba(253, 214, 99, 0.3);
+}
+
+.priority-tag.priority-low,
+.priority-tag.priority-fyi {
+  background: var(--fyi-bg);
+  color: var(--fyi-text);
+  border: 1px solid rgba(129, 201, 149, 0.3);
 }
 
 .analysis-content {
-  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.9rem;
   line-height: 1.5;
 }
 
-/* Visual Calendar App Widget Card Styling */
-.calendar-app-widget {
+.summary-item strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.summary-item span {
+  color: var(--text-muted);
+}
+
+/* Deadline Widget */
+.deadline-widget {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: #121212;
+  gap: 14px;
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
-  padding: 14px 18px;
+  padding: 12px 16px;
   border-radius: 10px;
-  margin-top: 14px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
 }
 
-.calendar-date-tile {
-  background: #2d2f31;
+.calendar-badge {
+  background: var(--card-elevated);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  text-align: center;
-  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 54px;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
-.calendar-month-header {
+.cal-month {
   background: #ea4335;
   color: #ffffff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: 0.58rem;
+  font-weight: 800;
   padding: 2px 6px;
-  letter-spacing: 0.5px;
+  width: 100%;
+  text-align: center;
 }
 
-.calendar-day-number {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-main);
-  padding: 4px 0 2px 0;
+.cal-day {
+  font-size: 1rem;
+  padding: 4px 0;
 }
 
-.calendar-year-text {
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  padding-bottom: 4px;
-}
-
-.calendar-info-content {
+.deadline-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.calendar-info-title {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.widget-label {
+  font-size: 0.65rem;
+  font-weight: 700;
   color: var(--text-muted);
-  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.calendar-info-value {
-  font-size: 0.95rem;
-  color: var(--text-main);
+.deadline-text {
+  font-size: 0.88rem;
   font-weight: 500;
+  color: var(--accent-color);
 }
 
-/* Voice Assistant Button Styling */
+.reasons-list {
+  padding-left: 20px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Voice Assistant & Smart Reply Generator */
 .reply-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-}
-
-.reply-card-header h4 {
-  margin-bottom: 0 !important;
 }
 
 .btn-voice-demo {
-  background: #004a77;
-  color: #8ab4f8;
-  border: 1px solid #174ea6;
-  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--selected-bg);
+  color: var(--accent-color);
+  border: 1px solid rgba(138, 180, 248, 0.2);
+  padding: 6px 12px;
   font-size: 0.75rem;
-  font-weight: 500;
-  border-radius: 12px;
+  font-weight: 600;
+  border-radius: 16px;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-voice-demo:hover {
   background: #174ea6;
+  color: #ffffff;
 }
 
-.btn-voice-demo.listening {
+.btn-voice-demo.listening,
+.btn-voice-demo.recording {
   background: #c5221f;
   color: #ffffff;
-  border-color: #c5221f;
-  animation: pulseButton 1s infinite alternate;
+  border-color: #ea4335;
+  animation: pulseVoice 1s infinite alternate;
 }
 
-@keyframes pulseButton {
+@keyframes pulseVoice {
   from { opacity: 1; }
   to { opacity: 0.6; }
 }
 
-.category-tag {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.category-critical { background: #5c1d1d; color: #f28b82; }
-.category-reply_today { background: #5f4b00; color: #fdd663; }
-.category-fyi { background: #0d4429; color: #81c995; }
-
-textarea {
+textarea#voice-input {
   width: 100%;
   height: 90px;
-  background: #121212;
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-main);
   padding: 12px;
   border-radius: 8px;
-  margin-bottom: 12px;
   resize: vertical;
   outline: none;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  transition: border-color 0.2s ease;
 }
 
-textarea:focus {
+textarea#voice-input:focus {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 1px var(--accent-color);
 }
@@ -531,62 +745,78 @@ textarea:focus {
 }
 
 .tone-wrapper label {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
 }
 
-select {
-  background: #121212;
+select#tone-select {
+  background: var(--bg-color);
   color: var(--text-main);
   border: 1px solid var(--border-color);
   padding: 8px 12px;
   border-radius: 8px;
   outline: none;
   font-size: 0.85rem;
+  cursor: pointer;
+}
+
+select#tone-select:focus {
+  border-color: var(--accent-color);
 }
 
 .btn-primary {
   background: var(--accent-color);
-  color: #202124;
+  color: #121212;
   border: none;
-  padding: 10px 20px;
-  font-weight: 500;
-  font-size: 0.9rem;
+  padding: 9px 18px;
+  font-weight: 600;
+  font-size: 0.85rem;
   border-radius: 20px;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .reply-output {
-  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 14px;
   border-top: 1px solid var(--border-color);
 }
 
 .draft-text {
-  background: #121212;
+  background: var(--bg-color);
   padding: 14px;
   border-radius: 8px;
   white-space: pre-wrap;
-  font-family: 'Roboto Mono', Courier, monospace;
+  font-family: 'Roboto Mono', monospace, sans-serif;
   font-size: 0.85rem;
-  margin-top: 8px;
   border: 1px solid var(--border-color);
-  color: #8ab4f8;
+  color: var(--accent-color);
+  line-height: 1.5;
 }
 
-.hidden { display: none; }
+/* UTILITY CLASSES */
+.hidden {
+  display: none !important;
+}
 
+/* RESPONSIVE LAYOUT */
 @media (max-width: 900px) {
   .gmail-main {
     grid-template-columns: 1fr;
   }
+  
   .gmail-sidebar {
-    height: 280px;
+    height: 300px;
+  }
+  
+  .nav-search input {
+    width: 200px;
   }
 }
